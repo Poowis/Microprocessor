@@ -9,6 +9,7 @@ LiquidCrystal_I2C lcd(0x3F, 16, 2);
 
 byte mac[] = {0x00, 0xAB, 0xCD, 0xEF, 0xAB, 0xCD};
 IPAddress server(10, 30, 4, 184);
+IPAddress ip(10, 30, 4, 185);
 
 EthernetClient ethClient;
 PubSubClient client(ethClient);
@@ -22,6 +23,9 @@ const int light = 9;
 const int r = 3;
 const int g = 6;
 const int b = 5;
+
+int Light = 0;
+int brightness = 0;
 
 void printText(int col, int row, String text)
 {
@@ -83,15 +87,15 @@ float getLength()
   return pulseIn(echo, HIGH) / 29 / 2 / 100.0;
 }
 
-String getPIR()
+int getPIR()
 {
   if (digitalRead(pir) == HIGH)
   {
-    return " true";
+    return 1;
   }
   else
   {
-    return "false";
+    return 0;
   }
 }
 
@@ -111,12 +115,21 @@ void setRGB(int red, int green, int blue)
 
 void setLight(char *topic, byte *payload, unsigned int length)
 {
-   if (strcmp(topic, "light") == 0)
+  if (strcmp(topic, "light") == 0) {
+    brightness = atoi((char *)payload);
+  } else  if (strcmp(topic, "Light") == 0){
+    Light = atoi((char *)payload);
+  } 
+  if (Light == 0)
    {
-    int num = atoi((char *)payload);
-//    setRGB(num, num, num);
-    analogWrite(light, num);
+    setRGB(0, 0, 0);
+      
+   } else {
+      setRGB(brightness, brightness, brightness);
    }
+   Serial.print(Light);
+   Serial.print("   ");
+   Serial.println(brightness);
 }
 
 void reconnect()
@@ -130,6 +143,7 @@ void reconnect()
     {
       Serial.println("connected");
       client.subscribe("light");
+      client.subscribe("Light");
     }
     else
     {
@@ -188,7 +202,7 @@ void loop()
 
   publish("length", length);
   publish("temp", temp);
-  publish("dsTemp", dsTemp);
+  publish("dstemp", dsTemp);
   publish("pir", pirr);
 
   if (!client.connected())
@@ -198,5 +212,5 @@ void loop()
   
   client.loop();
 
-  delay(500);
+  delay(100);
 }

@@ -20,8 +20,8 @@
     <script type="text/javascript" src="bower_components/bootstrap-material-design/dist/js/material.min.js"></script>
     <script type="text/javascript" src="bower_components/bootstrap-material-design/dist/js/ripples.min.js"></script>
     <script type="text/javascript">
-        var MQTTbroker = 'broker.mqttdashboard.com';
-        var MQTTport = 8000;
+        var MQTTbroker = '10.30.4.184';
+        var MQTTport = 9001;
         var MQTTsubTopic = ["temp", "dstemp", "pir", "length"];
         var MQTTpublishTopic = 'Light';
 
@@ -202,9 +202,9 @@
             <div class="text-center">
                 <div class="row">
                     <div class="col-md-12">
-                        <button class="btn btn-material-green-A400" id="publish-button" data-value="on">On<div class="ripple-wrapper"></div>
+                        <button class="btn btn-material-green-A400" id="publish-button" data-value="1">On<div class="ripple-wrapper"></div>
                             </button>
-                        <button class="btn btn-material-deep-orange-A400" id="publish-button" data-value="off">Off<div class="ripple-wrapper"></div>
+                        <button class="btn btn-material-deep-orange-A400" id="publish-button" data-value="0">Off<div class="ripple-wrapper"></div>
                             </button>
                     </div>
                 </div>
